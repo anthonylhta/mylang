@@ -1,0 +1,16 @@
+// Recursive Fibonacci.
+// Exercises: function declarations, recursion, return, parameters, and
+// arithmetic. Prints fib(0) through fib(20).
+
+fn fib(n) {
+  if (n < 2) {
+    return n;
+  }
+  return fib(n - 1) + fib(n - 2);
+}
+
+let i = 0;
+while (i <= 20) {
+  print fib(i);
+  i = i + 1;
+}
