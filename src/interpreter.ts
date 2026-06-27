@@ -11,8 +11,8 @@ import type {
   Logical,
   Stmt,
   Unary,
-} from "./ast";
-import { RuntimeError } from "./errors";
+} from "./ast.js";
+import { RuntimeError } from "./errors.js";
 
 /** Every runtime value the interpreter can produce. */
 export type Value = number | string | boolean | null | MyLangFunction;
@@ -33,8 +33,12 @@ export class Environment {
   }
 
   get(name: string, line: number): Value {
-    const scope = this.resolve(name);
-    if (scope) return scope.values.get(name)!;
+    // Values are never stored as `undefined` (nil is `null`), so a defined
+    // `undefined` from the map unambiguously means "not in this scope".
+    for (let scope: Environment | null = this; scope; scope = scope.parent) {
+      const value = scope.values.get(name);
+      if (value !== undefined) return value;
+    }
     throw new RuntimeError(`Undefined variable '${name}'.`, line);
   }
 
@@ -75,7 +79,9 @@ export class MyLangFunction {
     }
     // A fresh scope per call, parented on the closure (not the call site).
     const scope = new Environment(this.closure);
-    this.declaration.params.forEach((param, i) => scope.define(param, args[i]));
+    this.declaration.params.forEach((param, i) => {
+      scope.define(param, args[i]);
+    });
     try {
       interpreter.executeBlock(this.declaration.body.statements, scope);
     } catch (signal) {

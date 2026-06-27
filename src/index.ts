@@ -6,10 +6,10 @@
 import { readFileSync } from "node:fs";
 import { createInterface } from "node:readline";
 
-import { MyLangError } from "./errors";
-import { Interpreter } from "./interpreter";
-import { tokenize } from "./lexer";
-import { parse } from "./parser";
+import { MyLangError } from "./errors.js";
+import { Interpreter } from "./interpreter.js";
+import { tokenize } from "./lexer.js";
+import { parse } from "./parser.js";
 
 function run(source: string, interpreter: Interpreter, echoLast = false): void {
   const tokens = tokenize(source);
@@ -51,7 +51,9 @@ function repl(): void {
     prompt: "mylang> ",
   });
 
-  console.log("mylang v0 REPL — type an expression or statement, Ctrl+D to exit.");
+  console.log(
+    "mylang v0 REPL — type an expression or statement, Ctrl+D to exit.",
+  );
   rl.prompt();
 
   rl.on("line", (line) => {

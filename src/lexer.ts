@@ -2,7 +2,7 @@
 // It is hand-written and single-pass: walk the source one character at a time,
 // emitting a token whenever a lexeme is complete.
 
-import { LexError } from "./errors";
+import { LexError } from "./errors.js";
 
 export type TokenType =
   // literals
@@ -88,59 +88,91 @@ export class Lexer {
     const c = this.advance();
     switch (c) {
       case "(":
-        return this.add("LPAREN");
+        this.add("LPAREN");
+        break;
       case ")":
-        return this.add("RPAREN");
+        this.add("RPAREN");
+        break;
       case "{":
-        return this.add("LBRACE");
+        this.add("LBRACE");
+        break;
       case "}":
-        return this.add("RBRACE");
+        this.add("RBRACE");
+        break;
       case ",":
-        return this.add("COMMA");
+        this.add("COMMA");
+        break;
       case ";":
-        return this.add("SEMICOLON");
+        this.add("SEMICOLON");
+        break;
       case "+":
-        return this.add("PLUS");
+        this.add("PLUS");
+        break;
       case "-":
-        return this.add("MINUS");
+        this.add("MINUS");
+        break;
       case "*":
-        return this.add("STAR");
+        this.add("STAR");
+        break;
       case "%":
-        return this.add("PERCENT");
+        this.add("PERCENT");
+        break;
       case "/":
         if (this.match("/")) {
           // Line comment: consume to end of line.
           while (this.peek() !== "\n" && !this.isAtEnd()) this.advance();
-          return;
+        } else {
+          this.add("SLASH");
         }
-        return this.add("SLASH");
+        break;
       case "!":
-        return this.add(this.match("=") ? "NEQ" : "BANG");
+        this.add(this.match("=") ? "NEQ" : "BANG");
+        break;
       case "=":
-        return this.add(this.match("=") ? "EQ" : "ASSIGN");
+        this.add(this.match("=") ? "EQ" : "ASSIGN");
+        break;
       case "<":
-        return this.add(this.match("=") ? "LTE" : "LT");
+        this.add(this.match("=") ? "LTE" : "LT");
+        break;
       case ">":
-        return this.add(this.match("=") ? "GTE" : "GT");
+        this.add(this.match("=") ? "GTE" : "GT");
+        break;
       case "&":
-        if (this.match("&")) return this.add("AND");
-        throw new LexError("Unexpected character '&' (did you mean '&&'?).", this.line);
+        if (!this.match("&")) {
+          throw new LexError(
+            "Unexpected character '&' (did you mean '&&'?).",
+            this.line,
+          );
+        }
+        this.add("AND");
+        break;
       case "|":
-        if (this.match("|")) return this.add("OR");
-        throw new LexError("Unexpected character '|' (did you mean '||'?).", this.line);
+        if (!this.match("|")) {
+          throw new LexError(
+            "Unexpected character '|' (did you mean '||'?).",
+            this.line,
+          );
+        }
+        this.add("OR");
+        break;
       case " ":
       case "\r":
       case "\t":
-        return; // ignore whitespace
+        break; // ignore whitespace
       case "\n":
         this.line++;
-        return;
+        break;
       case '"':
-        return this.string();
+        this.string();
+        break;
       default:
-        if (this.isDigit(c)) return this.number();
-        if (this.isAlpha(c)) return this.identifier();
-        throw new LexError(`Unexpected character '${c}'.`, this.line);
+        if (this.isDigit(c)) {
+          this.number();
+        } else if (this.isAlpha(c)) {
+          this.identifier();
+        } else {
+          throw new LexError(`Unexpected character '${c}'.`, this.line);
+        }
     }
   }
 

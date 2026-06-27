@@ -20,9 +20,9 @@ import type {
   Stmt,
   Unary,
   WhileStmt,
-} from "./ast";
-import { ParseError } from "./errors";
-import type { Token, TokenType } from "./lexer";
+} from "./ast.js";
+import { ParseError } from "./errors.js";
+import type { Token, TokenType } from "./lexer.js";
 
 export class Parser {
   private current = 0;
