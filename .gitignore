@@ -22,6 +22,12 @@ coverage/
 .cache/
 .vitest/
 
+# Local decision notes / ADRs — kept out of public history on purpose
+notes/
+
+# Claude Code personal/local overrides (committed config lives in .claude/)
+.claude/settings.local.json
+
 # Environment
 .env
 .env.local
