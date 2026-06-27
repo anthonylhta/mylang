@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import type { Binary, Expr, FunctionDecl, Stmt } from "../src/ast";
-import { ParseError } from "../src/errors";
-import { tokenize } from "../src/lexer";
-import { parse } from "../src/parser";
+import type { Binary, Expr, FunctionDecl, Stmt } from "../src/ast.js";
+import { ParseError } from "../src/errors.js";
+import { tokenize } from "../src/lexer.js";
+import { parse } from "../src/parser.js";
 
 /** Parse a full program into its statement list. */
 function parseProgram(source: string): Stmt[] {

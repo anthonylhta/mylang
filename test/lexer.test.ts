@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { LexError } from "../src/errors";
-import { type Token, type TokenType, tokenize } from "../src/lexer";
+import { LexError } from "../src/errors.js";
+import { type Token, type TokenType, tokenize } from "../src/lexer.js";
 
 /** Token types in order, dropping the trailing EOF for easier assertions. */
 function types(source: string): TokenType[] {
@@ -31,19 +31,21 @@ describe("lexer", () => {
   });
 
   it("distinguishes keywords from identifiers", () => {
-    expect(types("let x while if else fn return true false nil print")).toEqual([
-      "LET",
-      "IDENTIFIER",
-      "WHILE",
-      "IF",
-      "ELSE",
-      "FN",
-      "RETURN",
-      "TRUE",
-      "FALSE",
-      "NIL",
-      "PRINT",
-    ]);
+    expect(types("let x while if else fn return true false nil print")).toEqual(
+      [
+        "LET",
+        "IDENTIFIER",
+        "WHILE",
+        "IF",
+        "ELSE",
+        "FN",
+        "RETURN",
+        "TRUE",
+        "FALSE",
+        "NIL",
+        "PRINT",
+      ],
+    );
   });
 
   it("scans one- and two-character operators", () => {
