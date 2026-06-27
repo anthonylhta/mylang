@@ -1,0 +1,21 @@
+// Closures: an inner function captures and mutates a variable from the scope
+// it was defined in, and keeps that state alive after the outer function
+// returns. Each counter has its own independent `count`.
+
+fn makeCounter() {
+  let count = 0;
+  fn increment() {
+    count = count + 1;
+    return count;
+  }
+  return increment;
+}
+
+let a = makeCounter();
+let b = makeCounter();
+
+print a(); // 1
+print a(); // 2
+print a(); // 3
+print b(); // 1  (independent state)
+print a(); // 4
