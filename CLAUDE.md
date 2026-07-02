@@ -20,18 +20,18 @@ closures — enough to run real programs like FizzBuzz and recursive Fibonacci.
 
 ### Commands
 
-| Task          | Command             | Notes                                        |
-| ------------- | ------------------- | -------------------------------------------- |
-| Dev / REPL    | `npm run dev`       | Interactive REPL (Ctrl+D to exit).           |
-| Run a file    | `npx tsx src/index.ts <file>` | e.g. `examples/fizzbuzz.mylang`.   |
-| Test          | `npm test`          | Vitest, single run.                          |
-| Test (watch)  | `npm run test:watch`|                                              |
-| Typecheck     | `npm run typecheck` | `tsc --noEmit`.                              |
-| Lint          | `npm run lint`      | `biome check .`.                             |
-| Lint (fix)    | `npm run lint:fix`  | `biome check --write .`.                     |
-| Format        | `npm run format`    | `biome format --write .`.                    |
-| Build         | `npm run build`     | Emits to `dist/` via `tsconfig.build.json`.  |
-| Full CI       | `npm run ci`        | typecheck → lint → test → build.             |
+| Task         | Command                       | Notes                                       |
+| ------------ | ----------------------------- | ------------------------------------------- |
+| Dev / REPL   | `npm run dev`                 | Interactive REPL (Ctrl+D to exit).          |
+| Run a file   | `npx tsx src/index.ts <file>` | e.g. `examples/fizzbuzz.mylang`.            |
+| Test         | `npm test`                    | Vitest, single run.                         |
+| Test (watch) | `npm run test:watch`          |                                             |
+| Typecheck    | `npm run typecheck`           | `tsc --noEmit`.                             |
+| Lint         | `npm run lint`                | `biome check .`.                            |
+| Lint (fix)   | `npm run lint:fix`            | `biome check --write .`.                    |
+| Format       | `npm run format`              | `biome format --write .`.                   |
+| Build        | `npm run build`               | Emits to `dist/` via `tsconfig.build.json`. |
+| Full CI      | `npm run ci`                  | typecheck → lint → test → build.            |
 
 Run `npm run ci` before opening a PR; it mirrors what CI runs.
 
@@ -71,22 +71,37 @@ These are not optional. They keep the public history clean and reviewable.
   `git push --force`, deleting or overwriting files you didn't create, changing
   repository settings, or sending data to external services. Ask first.
 - **Read the real docs first.** Before writing code against a fast-moving
-  dependency, read its *installed* docs/README/changelog (in `node_modules/` or
+  dependency, read its _installed_ docs/README/changelog (in `node_modules/` or
   via the tool's own `--help`). The current API may differ from training data.
   Heed deprecation notices and prefer the version actually installed here.
 - Keep `main` green: if a change would break typecheck, lint, tests, or the
   build, fix it or don't open the PR.
 
+## gstack (global skill suite)
+
+gstack is installed machine-globally (`~/.claude/skills/gstack`, commands prefixed
+`/gstack-*`) — never vendored into this repo. Proactively suggest the right one when
+the task fits — don't wait to be asked:
+
+- **Use here:** `/gstack-investigate` (systematic root-cause debugging),
+  `/gstack-diagram` (lexer → parser → interpreter flow diagrams), `/gstack-careful` +
+  `/gstack-freeze` (safety rails). The browser skills (`/gstack-qa`,
+  `/gstack-benchmark`) don't apply — this is a CLI/REPL.
+- **Never here:** `/gstack-ship` and `/gstack-land-and-deploy` — they push, open PRs
+  and merge on their own terms; the branch → PR → green CI flow above owns shipping
+  and merging stays manual. Keep gstack checkpoint auto-commits off; commits follow
+  the commit rules above.
+
 ## Layout
 
-| Path                 | Responsibility                                   |
-| -------------------- | ------------------------------------------------ |
-| `src/lexer.ts`       | Source text → tokens                             |
-| `src/ast.ts`         | AST node type definitions                        |
-| `src/parser.ts`      | Tokens → AST (recursive descent)                 |
-| `src/interpreter.ts` | Walks the AST; scopes and closures               |
-| `src/errors.ts`      | `LexError` / `ParseError` / `RuntimeError`       |
-| `src/index.ts`       | CLI: REPL and run-from-file                       |
-| `examples/`          | Sample `.mylang` programs                         |
-| `test/`              | Vitest tests (lexer, parser, examples e2e)       |
-| `notes/`             | Local decision notes / ADRs — **gitignored**     |
+| Path                 | Responsibility                               |
+| -------------------- | -------------------------------------------- |
+| `src/lexer.ts`       | Source text → tokens                         |
+| `src/ast.ts`         | AST node type definitions                    |
+| `src/parser.ts`      | Tokens → AST (recursive descent)             |
+| `src/interpreter.ts` | Walks the AST; scopes and closures           |
+| `src/errors.ts`      | `LexError` / `ParseError` / `RuntimeError`   |
+| `src/index.ts`       | CLI: REPL and run-from-file                  |
+| `examples/`          | Sample `.mylang` programs                    |
+| `test/`              | Vitest tests (lexer, parser, examples e2e)   |
+| `notes/`             | Local decision notes / ADRs — **gitignored** |
